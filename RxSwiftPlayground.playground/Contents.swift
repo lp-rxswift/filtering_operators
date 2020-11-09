@@ -56,3 +56,19 @@ example(of: "Skip while") {
     .subscribe(onNext: { print($0) })
     .disposed(by: disposeBag)
 }
+
+example(of: "Skip until") {
+  let disposeBag = DisposeBag()
+  let subject = PublishSubject<String>()
+  let trigger = PublishSubject<String>()
+
+  subject
+    .skipUntil(trigger)
+    .subscribe(onNext: { print($0) })
+    .disposed(by: disposeBag)
+
+  subject.onNext("A")
+  subject.onNext("B")
+  trigger.onNext("X")
+  subject.onNext("C")
+}
