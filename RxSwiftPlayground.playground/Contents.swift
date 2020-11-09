@@ -122,3 +122,40 @@ example(of: "take until trigger") {
   trigger.onNext("X")
   subject.onNext("3")
 }
+
+example(of: "distinct until changed") {
+  let disposeBag = DisposeBag()
+  Observable.of("A", "A", "A", "B", "B", "A")
+    .distinctUntilChanged()
+    .subscribe(onNext: { print($0) })
+    .disposed(by: disposeBag)
+}
+
+example(of: "comparer distinct until changed") {
+  let disposeBag = DisposeBag()
+  let formatter = NumberFormatter()
+  formatter.numberStyle = .spellOut
+
+  Observable<NSNumber>.of(10, 110, 20, 200, 210, 310)
+    .distinctUntilChanged({ a, b in
+      guard
+        let aWords = formatter
+          .string(from: a)?
+          .components(separatedBy: " "),
+        let bWords = formatter
+          .string(from: b)?
+          .components(separatedBy: " ")
+        else {
+          return false
+      }
+      var containsMatch = false
+
+      for aWord in aWords where bWords.contains(aWord){
+        containsMatch = true
+      }
+
+      return containsMatch
+    })
+    .subscribe(onNext: { print($0) })
+    .disposed(by: disposeBag)
+}
