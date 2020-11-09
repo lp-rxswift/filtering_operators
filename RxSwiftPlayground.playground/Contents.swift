@@ -92,5 +92,17 @@ example(of: "take while") {
     .map({ $1 })
     .subscribe(onNext: { print($0) })
     .disposed(by: disposeBag)
+}
 
+example(of: "take until") {
+  let disposeBag = DisposeBag()
+  Observable.of(1, 2, 3, 4, 5, 6, 7, 8, 9)
+    .takeUntil(.inclusive) { $0.isMultiple(of: 4) }
+    .subscribe(onNext: { print($0) })
+    .disposed(by: disposeBag)
+  print("-")
+  Observable.of(1, 2, 3, 4, 5, 6, 7, 8, 9)
+    .takeUntil(.exclusive) { $0.isMultiple(of: 4) }
+    .subscribe(onNext: { print($0) })
+    .disposed(by: disposeBag)
 }
