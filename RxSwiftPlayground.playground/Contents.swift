@@ -82,3 +82,15 @@ example(of: "Take") {
 }
 
 
+example(of: "take while") {
+  let disposeBag = DisposeBag()
+  Observable.of(2, 2, 4, 4, 6, 6)
+    .enumerated()
+    .takeWhile({ index, integer in
+      integer.isMultiple(of: 2) && index < 3
+    })
+    .map({ $1 })
+    .subscribe(onNext: { print($0) })
+    .disposed(by: disposeBag)
+
+}
