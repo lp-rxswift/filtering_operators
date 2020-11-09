@@ -222,5 +222,3 @@ example(of: "Phone Challenge") {
 
   input.onNext(9)
 }
-
-TESSTE
